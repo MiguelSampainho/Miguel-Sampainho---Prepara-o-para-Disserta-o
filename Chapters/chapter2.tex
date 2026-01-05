@@ -1,0 +1,132 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter2.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter2.tex}%
+
+\chapter{Fundamentals and State of the Art}
+\label{cha:fundamentals_state_of_the_art}
+
+\section{Introduction}
+\label{sec:Introduction}
+
+This chapter provides the conceptual and technical foundations that support the work to be developed in this dissertation. It begins by introducing the CAMARA project, explaining its role in the standardization of network APIs. Subsequently, the CAMARA APIs implemented by MEO are examined, which will create the basis for the practical work to be developed later. The chapter concludes with an analysis of real-world use cases that demonstrate the applicability and reliance of CAMARA-based APIs.
+
+To understand the purpose and design of the CAMARA project, it helps to first clarify the main ideas behind programmability and capability exposure in modern 5G networks. Current fifth-generation systems represent a shift toward software-driven architectures, where tools like Software-Defined Networking (SDN) and Network Function Virtualization (NFV) give operators much more freedom in how they configure and manage network behaviour \cite{BARAKABITZE2020106984, BONATI2020107516}. However, for this flexibility to be useful beyond the operator’s own systems, it also needs to be made available to external applications and service providers. This is enabled through standardized exposure mechanisms, with 3GPP’s northbound interfaces serving as the primary framework for this interaction \cite{MICHAELIDES2025107645}. 
+
+In this context, network APIs function as an abstraction layer that presents complex network capabilities in a more manageable and secure form. They reduce the need for developers to engage directly with detailed network operations while still maintaining interoperability across different systems \cite{BONATI2020107516}. These concepts are important for understanding CAMARA’s effort to provide a common approach to API exposure among operators, and they offer the technical background needed for the discussion of MEO’s CAMARA APIs later in the chapter.
+
+\section{The CAMARA Project}
+\label{sec:camara_project}
+
+    \subsection{Origins and Motivation}
+    \label{subsec:camara_origins}
+
+    Before the emergence of CAMARA, mobile network operators were already exposing a limited set of network capabilities to external systems through APIs. In practice, these exposure mechanisms were developed independently by each operator and reflected local design choices rather than a shared architectural vision. This resulted in proprietary interfaces, differing data models, and variations in behaviour between networks. From the perspective of application developers, such differences meant that integrations were often closely tied to a specific operator, making it difficult to reuse applications across networks. The resulting fragmentation was not primarily due to technical limitations, but instead to the lack of a common, standardized approach to network API exposure across the wider telecommunications ecosystem \cite{BONATI2020107516, BARAKABITZE2020106984}.
+
+    From an application development perspective, fragmentation created a range of technical and operational difficulties. Applications that relied on network capabilities rarely worked across operators without modification. In most cases, developers had to adapt the application to each operator’s API, which increased development effort and maintenance costs over time. Deploying the same service on multiple networks was therefore difficult. It was often slow and required additional work, limiting scalability and slowing innovation. For developers and service providers outside the telecommunications domain, these constraints were especially significant, as they usually lacked the resources to support multiple operator-specific integrations. Without a unified exposure model, building portable and network-aware applications that behaved consistently across different mobile networks remained challenging \cite{BONATI2020107516, MICHAELIDES2025107645}.
+
+    As these limitations became clearer over time, it was increasingly accepted within the telecommunications industry that a common approach to network API exposure was needed. Continuing with separate, operator-specific solutions proved inefficient and difficult to scale. Instead, attention shifted toward exposing network capabilities through shared interfaces with stable semantics and predictable behavior. This made it possible for applications to be built once and used across different networks with minimal adaptation. In doing so, mobile networks moved closer to the logic of the wider API economy. The network therefore began to be treated less as a set of isolated systems and more as a programmable platform that could support broader innovation and easier third-party adoption \cite{BONATI2020107516, Raza:17}.
+
+    In response to the growing need for harmonization in network API exposure, the CAMARA project was launched as a joint initiative involving the GSMA and the Linux Foundation. The project was conceived to address fragmentation in operator-specific APIs by defining a common, open framework for exposing network capabilities. The GSMA provides the industry alignment required to ensure adoption across mobile network operators, while the Linux Foundation contributes an open-source governance model that promotes transparency and collaborative development. Through this combined organizational and technical approach, CAMARA establishes a neutral environment in which operators, vendors, and developers can jointly define standardized APIs. As a result, CAMARA positions itself not only as a technical specification effort, but also as an industry-wide coordination mechanism aimed at enabling consistent and scalable access to network capabilities \cite{camara_presentation, camara_scope}.
+
+    The CAMARA project outlines specific objectives for the exposure and consumption of network capabilities. CAMARA aims to simplify network access by masking operator-specific details behind a common API framework. This standardization removes the requirement for custom integration with each operator, allowing for faster development cycles. The project also addresses scalability, enabling the deployment of network-aware applications across multiple providers without extensive adaptation. This consistency is a prerequisite for a fully open telecommunications environment \cite{camara_presentation, camara_scope}.
+
+    \subsection{CAMARA Architecture and Principles}
+    \label{subsec:camara_architecture}
+
+    At a high level, the CAMARA architecture is designed as an intermediate layer between external applications and the underlying mobile network infrastructure. Its primary role is to provide a standardized and technology-agnostic interface through which network capabilities can be accessed, while hiding the internal complexity of operator networks. Applications, hyperscalers, and aggregators interact with the network exclusively through CAMARA-defined northbound APIs, whereas the actual realization of these capabilities remains encapsulated within operator-specific exposure platforms. This layered approach allows network functions to be exposed in a uniform manner, independently of the technologies and implementations used within each operator’s network.
+
+    \begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../Figures/Images/camara_architecture.png}
+    \caption{High-level CAMARA Architecture. Source: CAMARA Project website \cite{camara_scope}.}
+    \label{fig:camara_architecture}
+    \end{figure}
+
+    Figure~\ref{fig:camara_architecture} illustrates this high-level architectural view, highlighting the separation between API consumers, the CAMARA exposure layer, and the underlying network capabilities.
+
+    A central aspect of the CAMARA architecture is the clear separation between network implementation, capability exposure, and application use. Network operators keep full control over their internal functions and underlying technologies. CAMARA, by contrast, focuses only on defining standardized interfaces and common behavioral rules for exposing these capabilities. This separation allows different network technologies to operate behind a shared API layer, without exposing implementation details to application developers. As a result, the architecture supports interoperability and portability while preserving operator autonomy and flexibility in how network capabilities are implemented \cite{camara_presentation, camara_scope}.
+
+    \begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../Figures/Images/TransformationFunction-1.png}
+    \caption{Service API abstraction through transformation functions. Source: CAMARA Project website \cite{camara_scope}.}
+    \label{fig:camara_transformation}
+    \end{figure}
+
+    Figure~\ref{fig:camara_transformation} further illustrates how heterogeneous network and IT capabilities can be abstracted behind a unified service API layer through transformation functions.
+
+    By decoupling capability exposure from network implementation, the CAMARA architecture enables a scalable and evolvable model for network API standardization. This architectural approach supports multi-operator adoption while allowing network capabilities to evolve independently of the interfaces exposed to applications. These principles provide the foundation for the API exposure model discussed in the following section \cite{camara_presentation, camara_scope}.
+
+
+    \subsection{API Exposure Model}
+    \label{subsec:api_exposure_model}
+
+    In the CAMARA context, API exposure describes how selected network capabilities are made available to external applications in a controlled and standardized way. Applications are not given direct access to internal network functions. Instead, CAMARA defines abstract interfaces that represent these capabilities without depending on specific technologies. These interfaces serve as a contract between the network and application layers. They describe how each capability behaves while hiding implementation details. This makes it easier for applications to use network functions in the same way across different operators, even when their underlying networks are implemented differently \cite{camara_scope}.
+
+    A central goal of the CAMARA exposure model is to ensure that network APIs behave in a similar way across different operators. CAMARA defines shared semantics and interaction patterns to limit differences in how operators expose network capabilities. This reduces the extent to which applications must handle operator-specific behavior. Developers can therefore build network-aware applications that run across multiple networks with only small adjustments. In this way, the exposure model supports portability and scalability in multi-operator environments and large-scale deployments \cite{camara_scope}.
+
+    Together, these characteristics define an exposure model that abstracts network complexity while enabling reliable and repeatable interaction with network capabilities. By formalizing how capabilities are exposed and consumed, CAMARA establishes a foundation that supports multi-operator interoperability and large-scale application deployment. This exposure model is a key enabler for treating network capabilities as consumable services, an idea that is further explored in the context of Network-as-a-Service and the GSMA Open Gateway initiative in the following section.
+
+
+    \subsection{NaaS and Open Gateway}
+    \label{subsec:naas_open_gateway}
+
+    Network-as-a-Service (NaaS) refers to the use of network capabilities as services that can be requested when needed. Instead of being tightly bound to specific network infrastructure, these capabilities are accessed through defined interfaces. Standardized network APIs are therefore required to make this approach practical for application developers. CAMARA contributes by providing a common API framework for exposing network capabilities in a consistent way. This allows the same approach to be applied across different operators and network implementations \cite{camara_scope}.
+
+    Within this context, the GSMA Open Gateway initiative provides a coordinated framework for aligning network API exposure across operators at a global scale. Rather than defining new APIs itself, Open Gateway establishes a common industry vision and adoption model, relying on the CAMARA project as the technical reference for standardized network APIs. Through this alignment, operators can expose network capabilities using consistent interfaces while participating in a broader, interoperable ecosystem that supports multi-operator deployment and large-scale application development \cite{camara_scope}.
+
+    Together, the NaaS paradigm and the GSMA Open Gateway initiative provide the broader context in which CAMARA operates as a technical enabler for standardized network APIs. While Open Gateway focuses on coordination, adoption, and scale, CAMARA delivers the technical specifications that make this vision actionable. This alignment explains how network capabilities can be exposed consistently across operators and sets the stage for understanding the global rollout and availability of CAMARA APIs discussed in the following section.
+
+    \subsection{API Launch Status Worldwide}
+    \label{subsec:api_launch_status}
+
+    The worldwide launch of CAMARA APIs is currently progressing through coordinated initiatives led by the GSMA Open Gateway. Multiple mobile network operators have announced participation and initial deployments, indicating a transition from specification to practical adoption. However, the availability and maturity of exposed APIs vary across regions and operators, reflecting different stages of implementation and market readiness \cite{gsma_opengateway_site}.
+
+    This uneven rollout highlights the evolving nature of the CAMARA ecosystem and explains why implementations may differ between operators. At the same time, the existence of real deployments demonstrates that standardized network APIs are moving beyond conceptual frameworks toward operational use, providing relevant context for the analysis of operator-specific implementations presented later in this chapter.
+
+    \subsection{CAMARA APIs as a Service}
+    \label{subsec:camaraas}
+
+    The concept of offering CAMARA APIs as a service builds on the idea that network capabilities should be consumed through managed, service-oriented interfaces rather than as isolated technical endpoints. In this model, APIs are provided through platforms that support onboarding, access control, monitoring, and lifecycle management, enabling developers to integrate network capabilities in a controlled and scalable manner. While CAMARA primarily defines the technical specifications of network APIs, early demonstrations have shown how these APIs can be delivered and consumed as a service within real operational environments, validating the feasibility of this approach without constraining it to a single implementation \cite{camara_presentation, 11152879}.
+
+    This service-oriented perspective complements the architectural principles defined by CAMARA by focusing on how standardized APIs can be delivered and consumed in practice. By abstracting operational complexity behind managed platforms, the CAMARA APIs as a Service model provides a bridge between specification and deployment. This perspective naturally leads to the discussion of reference architectures that illustrate how CAMARA components can be integrated within operator environments, which is addressed in the following section.
+
+    \subsection{Reference Architecture}
+    \label{subsec:reference_architecture}
+
+    \subsection{CAMARA API Catalog}
+    \label{subsec:camara_api_catalog}
+
+\section{MEO's CAMARA APIs - Technical Overview}
+\label{sec:meo_camara_apis}
+
+    \subsection{Device Identifier}
+    \label{subsec:device_identifier}
+
+    \subsection{SIM Swap}
+    \label{subsec:sim_swap}
+
+    \subsection{Location Retrieval}
+    \label{subsec:location_retrieval}
+
+    \subsection{Location Verification}
+    \label{subsec:location_verification}
+
+    \subsection{QoS Profiles}
+    \label{subsec:qos_profiles}
+
+    \subsection{QoD}
+    \label{subsec:qod}
+
+\section{Real-World CAMARA-Based Use Cases}
+\label{sec:camara_use_cases}
+
+\section{Summary of the Chapter}
+\label{sec:chapter_summary}
+
