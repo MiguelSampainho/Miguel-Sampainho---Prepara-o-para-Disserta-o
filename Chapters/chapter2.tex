@@ -100,29 +100,344 @@ In this context, network APIs function as an abstraction layer that presents com
     \subsection{Reference Architecture}
     \label{subsec:reference_architecture}
 
+    To support the standardized exposure of network capabilities, CAMARA defines a reference architecture that separates the roles of application consumers, exposure or aggregation platforms, and mobile network operators. This separation keeps the complexity of the underlying network out of the application domain. At the same time, it provides a consistent and secure interface through which APIs can be accessed.
+
+    At a high level, the architecture consists of three logical layers. The application layer includes third-party services that consume CAMARA APIs. The exposure or aggregation layer acts as a single entry point and manages access to multiple operators. The operator layer contains the network capabilities implemented within each mobile network. By defining these layers and their boundaries, CAMARA supports interoperability across operators while allowing each operator to retain flexibility in how capabilities are implemented internally.
+
+    \begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../Figures/Images/NaaSServiceStandardization.png}
+    \caption{Reference architecture for standardized network capability exposure in CAMARA. Source: CAMARA Project website.}
+    \label{fig:camara_reference_architecture}
+    \end{figure}
+
+    Figure~\ref{fig:camara_reference_architecture} illustrates this reference architecture, highlighting how standardized service APIs abstract heterogeneous network and IT capabilities behind a common exposure layer.
+
     \subsection{CAMARA API Catalog}
     \label{subsec:camara_api_catalog}
 
-\section{MEO's CAMARA APIs - Technical Overview}
+    The CAMARA API Catalog defines the standardized network APIs provided by the CAMARA project. Each API represents a specific network capability and follows a common structure and set of behaviors. This allows applications to interact with network functions in a consistent way across different operators. The APIs are organized around exposed capabilities rather than underlying network technologies. As a result, implementation details are hidden, and applications can be developed in a more portable and interoperable manner \cite{camara_api_overview}.
+
+    In practice, the APIs included in the CAMARA catalog represent a shared reference rather than a mandatory implementation set. Mobile network operators may choose to implement a subset of the available APIs depending on technical readiness, regulatory considerations, and business priorities. For this reason, the following section focuses on the CAMARA APIs implemented by MEO, which form the technical basis for the analysis and use cases developed later in this dissertation \cite{camara_scope}.
+
+\section{CAMARA APIs - Technical Overview}
 \label{sec:meo_camara_apis}
 
-    \subsection{Device Identifier}
-    \label{subsec:device_identifier}
+    \subsection{Overview and API Classification}
+    \label{subsec:Overview_and_API_classification}
+    
+    This section presents an implementation-oriented overview of the CAMARA APIs and places them within the wider CAMARA ecosystem. The intention is not to analyse individual API specifications in detail, but to organize the available APIs according to the network capabilities they expose. This provides a clear starting point for the operator-specific analysis that follows.
 
-    \subsection{SIM Swap}
-    \label{subsec:sim_swap}
+    In the CAMARA project, network APIs are defined by the capabilities they expose rather than by the network technologies used to implement them. This makes it possible for application developers to work with network functionality at a higher level, without needing to understand operator-specific details. On this basis, APIs can be grouped into functional domains such as authentication and fraud prevention, location services, device information, and communication quality management.
+    
+    For the purposes of this dissertation, only CAMARA APIs that are considered mature are taken into account. These APIs are regarded as stable and suitable for practical use, and they represent capabilities that are sufficiently standardized for deployment across multiple operators. Table~\ref{tab:camara_api_classification} provides an overview of the mature CAMARA APIs examined in this work, grouped by capability category and based on the official CAMARA API overview \cite{camara_api_overview}.
 
-    \subsection{Location Retrieval}
-    \label{subsec:location_retrieval}
 
-    \subsection{Location Verification}
-    \label{subsec:location_verification}
 
-    \subsection{QoS Profiles}
-    \label{subsec:qos_profiles}
+\begin{table}[ht]
+    \centering
+    \scriptsize
+    % Define um novo tipo de coluna Y que alinha à esquerda e ajusta a largura
+    \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+    
+    % --- SUBTABELA A ---
+    \begin{subtable}{\textwidth}
+        \centering
+        \caption{Authentication, Location, Communication Services, and Communication Quality}
+        \label{tab:camara_api_classification_a}
+        
+        % 4 colunas iguais (Y)
+        \begin{tabularx}{\textwidth}{YYYY}
+            \toprule
+            \textbf{Authentication \& Fraud Prevention} &
+            \textbf{Location Services} &
+            \textbf{Communication Services} &
+            \textbf{Communication Quality} \\
+            \midrule
+            Call Forwarding Signal & Geofencing Subscriptions & WebRTC Call Handling & Application Profiles \\
+            Customer Insights & Location Retrieval & WebRTC Event Subscription & Connectivity Insights \\
+            Device Swap & Location Verification & WebRTC Registration & Connectivity Insights Subscriptions \\
+            Know Your Customer Age Verification & Population Density Data & & QoS Profiles \\
+            Know Your Customer Fill In & Region Device Count & & QoS Provisioning \\
+            Know Your Customer Match & & & Quality on Demand (QoD) \\
+            Know Your Customer Tenure & & & \\
+            Number Recycling & & & \\
+            Number Verification & & & \\
+            One Time Password SMS & & & \\
+            Scam Signal & & & \\
+            SIM Swap & & & \\
+            SIM Swap Subscriptions & & & \\
+            \bottomrule
+        \end{tabularx}
+    \end{subtable}
 
-    \subsection{QoD}
-    \label{subsec:qod}
+    \vspace{0.5cm}
+
+    % --- SUBTABELA B (Coluna Service Management Removida) ---
+    \begin{subtable}{\textwidth}
+        \centering
+        \caption{Device Information, Computing Services, and Payments}
+        \label{tab:camara_api_classification_b}
+        
+        % 3 colunas iguais (Y) - Service Management removido
+        \begin{tabularx}{\textwidth}{YYY}
+            \toprule
+            \textbf{Device Information} &
+            \textbf{Computing Services} &
+            \textbf{Payments and Charging} \\
+            \midrule
+            Connected Network Type & Simple Edge Discovery & Blockchain Public Address \\
+            Connected Network Type Subscriptions & & Carrier Billing \\
+            Device Identifier & & Carrier Billing Refund \\
+            Device Reachability Status & & \\
+            Device Reachability Status Subscriptions & & \\
+            Device Roaming Status & & \\
+            Device Roaming Status Subscriptions & & \\
+            \bottomrule
+        \end{tabularx}
+    \end{subtable}
+    \caption{Mature CAMARA APIs grouped by exposed capability category}
+    \label{tab:camara_api_classification}
+\end{table}
+
+
+    The following section contextualizes this general classification by examining the subset of CAMARA APIs made available within a specific operator environment.
+
+\clearpage
+
+    \subsection{MEO CAMARA APIs}
+    \label{subsec:meo_camara_apis}
+
+    To support the development of this dissertation, MEO provided access to a selected set of CAMARA APIs within the scope of the \textit{5G Sprint} project. This initiative enabled experimentation with standardized network APIs in both sandbox and production environments, including the possibility of testing with real SIM cards.
+    
+    In total, six CAMARA APIs were made available by MEO for this work. These APIs cover key network capabilities that are representative of the CAMARA ecosystem and suitable for practical experimentation. The APIs provided by MEO are: SIM Swap, Devoce Idenifier, Location Retrieval, Location Verification, Quality of Service Profiles, and Quality on Demand.  
+    
+    The availability of these APIs in controlled testing environments allowed the validation of real interaction flows between applications and network capabilities, bridging the gap between specification and operational usage. In the following section, each of these APIs is described in detail, including its functionality, invocation model, and technical characteristics.
+
+    \subsection{APIs Explained}
+    \label{subsec:apis_explained}
+
+    \subsubsection{Device Identifier}
+    \label{subsubsec:device_identifier}
+    
+    The Device Identifier API serves as a bridge between the application layer and the mobile network's equipment registry. It allows authorized applications to query the physical details of a mobile device currently in use by a subscriber, identified either by their phone number (MSISDN) or their active IP address.
+    
+    \paragraph{Motivation and Problem Statement}
+    According to the CAMARA specification, mobile applications typically cannot access sensitive details about the device on which they are installed. Although the mobile device user can technically access identifiers such as the IMEI, they may not possess the knowledge to locate it, or may commit errors if the information needs to be conveyed verbally or retyped. Consequently, relying on manual input creates information transcription issues. The Device Identifier API addresses these challenges by automatically obtaining this information, thereby overcoming access limitations and eliminating transcription errors, while also delivering operational efficiency and cost savings for the API customer.
+    
+    \paragraph{Functionality and Data Model}
+    The API is designed to resolve a transient network connection into a stable physical device identifier\textbf{, as illustrated in the operational flow in Figure \ref{fig:device_id_overview}}. The primary identifier exposed is the International Mobile Equipment Identity (IMEI), a 15-digit integer composed of an 8-digit Type Allocation Code (TAC) and a 6-digit serial number. The CAMARA specification defines three primary resources:
+    
+    \begin{itemize}
+        \item \textbf{Retrieve Identifier (`/retrieve-identifier`):} Returns the full IMEI or IMEI Software Version (IMEISV). This allows for strict hardware fingerprinting.
+        \item \textbf{Retrieve Type (`/retrieve-type`):} Returns only the manufacturer, model, and TAC, protecting the user's unique serial number while allowing for content optimization.
+        \item \textbf{Retrieve Pseudonym (`/retrieve-ppid`):} Generates a persistent Pairwise Pseudonymous Identifier (PPID), ensuring privacy compliance.
+    \end{itemize}
+    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=1\textwidth]{../Figures/Images/Device_Identifier_Overview.png}
+        \caption{Device Identifier API operational flow \cite{camara_device_identifier}.}
+        \label{fig:device_id_overview}
+    \end{figure}
+    
+    The following JSON snippet illustrates a typical response from the API, identifying a Nokia device and confirming the timestamp of the last verification:
+    
+    \begin{verbatim}
+    {
+       "lastChecked": "2024-02-20T10:41:38.657Z",
+       "imei": "4901542032375181",
+       "tac": "49015420",
+       "model": "3110",
+       "manufacturer": "Nokia"
+    }
+    \end{verbatim}
+    
+    \paragraph{Use Cases and Security}
+    The inclusion of the \texttt{lastChecked} field supports critical security scenarios. For instance, in the \textbf{Anti-Fraud} domain, it enables banks to verify if a transaction is originating from a known trusted device. Similarly, in \textbf{Asset Management} and \textbf{Insurance}, it facilitates the automatic registration of device details without manual entry, reducing errors and fraud risk \cite{camara_device_identifier}.
+
+    \subsubsection{SIM Swap}
+    \label{subsubsec:sim_swap}
+    
+    The SIM Swap API serves as a real-time monitoring service designed to detect changes in the Subscriber Identity Module (SIM) card associated with a specific mobile number (MSISDN). A "SIM swap" event occurs when a user's phone number is re-associated with a new Integrated Circuit Card Identifier (ICCID/IMSI). This process is standard for legitimate scenarios, such as replacing a lost or damaged card, upgrading to a new device, or activating a MultiSIM service. However, it is also a vector for account takeover fraud \cite{camara_sim_swap}.
+    
+    \paragraph{Motivation and Security Context}
+    Fraudsters frequently utilize SIM swap techniques to intercept Short Message Service (SMS) messages, specifically those containing One-Time Passwords (OTP) used for two-factor authentication. By transferring a victim's number to a SIM card in their possession, attackers can reset passwords and gain unauthorized access to sensitive services. The SIM Swap API mitigates this risk by providing businesses—such as banks and online service providers—with immediate insights into recent SIM changes, allowing them to adapt their security measures dynamically before authorizing high-risk transactions.
+    
+    \paragraph{Functionality and Endpoints}
+    The API offers a programmable interface to query the SIM status through two primary operations, supporting both retrospective checks and timestamp retrieval:
+    
+    \begin{itemize}
+        \item \textbf{Check Timestamp (`/retrieve-date`):} This endpoint returns the precise timestamp of the last SIM swap event. If no swap has occurred within the operator's data retention window, the API may return the initial SIM activation date. This allows applications to determine the "age" of the current SIM pairing.
+        \item \textbf{Check Period (`/check`):} This operation validates whether a SIM swap has occurred within a specific past period defined by the \texttt{maxAge} attribute (e.g., the last 24 hours). The response is a boolean indicator, simplifying the integration for decision engines that require a binary "safe/unsafe" signal.
+    \end{itemize}
+    
+    \paragraph{Authorization and Addressing}
+    Similar to the Device Identifier API, the SIM Swap API supports flexible addressing based on the authorization flow. When using a 3-legged access token (involving user consent), the phone number is implicitly derived from the token, ensuring privacy compliance. For 2-legged flows, the MSISDN must be explicitly provided in the request body.
+    
+    \paragraph{Use Cases and Benefits}
+    The ability to verify the integrity of the SIM-MSISDN association enables several critical security applications:
+    \begin{itemize}
+        \item \textbf{Fraud Prevention in Banking:} Financial institutions can query the API during suspicious transactions. A recent SIM swap signal can trigger enhanced authentication steps, effectively preventing funds from being siphoned from compromised accounts.
+        \item \textbf{Secure Password Resets:} E-commerce platforms and social networks can validate SIM stability before sending OTPs for password recovery. If a recent swap is detected, the service provider can block the SMS-based reset flow to prevent account takeover.
+        \item \textbf{Operational Efficiency:} By automating these checks via a standardized API, businesses can integrate risk management directly into their existing workflows, reducing the reliance on manual verification (e.g., call centers) and improving the overall user trust.
+    \end{itemize}
+
+    \subsubsection{Location Retrieval}
+    \label{subsubsec:location_retrieval}
+    
+    The Location Retrieval API allows authorized applications to obtain the geographic position of a mobile device as detected by the network operator. Unlike the verification API (which returns a boolean response), this service provides the actual coordinates of the user's location. The response describes the area where the device is localized, represented either as a circle (center point and radius) or a polygon, depending on the network's capabilities and density \cite{camara_location_retrieval}.
+    
+    \paragraph{Motivation and Context}
+    While mobile operating systems offer GPS-based location services, these can be spoofed, disabled by the user, or unavailable indoors. Network-based location provides a tamper-resistant alternative, as it relies on the physical infrastructure (cell towers) rather than client-side reporting. This makes it particularly valuable for fraud prevention, regulatory compliance, and emergency services, where the integrity of the location data is paramount.
+    
+    \paragraph{Functionality and Parameters}
+    The API exposes a single operation (`/retrieve`) that accepts specific constraints to tailor the response to the application's needs:
+    \begin{itemize}
+        \item \textbf{Freshness Control (`maxAge`):} The consumer can specify the maximum acceptable age of the location data (in seconds). If the network has cached data fresher than this value, it returns it immediately; otherwise, it attempts a fresh paging of the device.
+        \item \textbf{Accuracy Control (`maxSurface`):} This parameter defines the maximum acceptable area size (in square meters). If the network cannot pinpoint the device within this limit (e.g., in a rural area with large cell sectors), it returns an error, ensuring that the application does not act on overly vague data.
+    \end{itemize}
+    
+    The API handles complex scenarios such as **Multi-SIM environments** (e.g., a user with a smartphone and a smartwatch sharing the same number). In such cases, the operator may return the location of the primary device or an error if the specific device cannot be deterministically identified without additional identifiers like the IP address.
+    
+    \paragraph{Data Model}
+    The following JSON snippet illustrates a typical response where the location is defined as a circular area, including a timestamp of when the position was last verified:
+    
+    \begin{verbatim}
+    {
+      "lastLocationTime": "2023-10-17T13:18:23.682Z",
+      "area": {
+        "areaType": "CIRCLE",
+        "center": {
+          "latitude": 45.754114,
+          "longitude": 4.860374
+        },
+        "radius": 800
+      }
+    }
+    \end{verbatim}
+    
+    \paragraph{Use Cases}
+    The retrieval of trusted location data supports high-stakes use cases:
+    \begin{itemize}
+        \item \textbf{Emergency and Delivery Services:} Providing accurate coordinates to first responders or validating that a delivery driver is at the correct drop-off point.
+        \item \textbf{Fraud Prevention:} FinTech services can verify if a high-value transaction originates from a location consistent with the user's history, blocking requests from unexpected high-risk regions.
+        \item \textbf{Asset Tracking:} Real-time monitoring of valuable assets (e.g., secure logistics) independent of GPS jammers, as the location is derived from the cellular signal itself.
+    \end{itemize}
+
+    \subsubsection{Location Verification}
+    \label{subsubsec:location_verification}
+    
+    The Location Verification API provides a boolean-based confirmation mechanism to confirm whether a mobile device is physically present within a specified geographical area. Unlike the Location Retrieval API, which exposes exact coordinates, this service operates on a boolean validation model. The application defines a target area (typically a circle with a center point and radius), and the network returns a confirmation of presence without revealing the user's precise position \cite{camara_location_verification}.
+    
+    \paragraph{Motivation and Privacy Context}
+    In many use cases, such as regulatory compliance or rights management, an application only needs to know \textit{if} a user is in a specific region (e.g., "Is the user in Portugal?"), rather than \textit{where} exactly they are. This API addresses this requirement by minimizing data leakage. Because it does not return coordinates, it is generally subject to less friction regarding user consent compared to full location retrieval, making it ideal for background checks and seamless authentication flows.
+    
+    \paragraph{Functionality and Logic}
+    The API exposes a single `verify` operation where the consumer submits a target area (latitude, longitude, and radius) and, optionally, a `maxAge` parameter to control data freshness. The network compares its internal location estimation against the requested area and returns one of three possible outcomes:
+    \begin{itemize}
+        \item \textbf{TRUE:} The device's estimated location is fully contained within the requested area.
+        \item \textbf{FALSE:} The device is definitively outside the requested area (no overlap).
+        \item \textbf{PARTIAL:} The location estimation partially overlaps with the target area. In this scenario, the API may include a `matchRate` (percentage) indicating the likelihood of the device being present in the zone.
+    \end{itemize}
+    
+    \paragraph{Multi-SIM and Error Handling}
+    Similar to other CAMARA APIs, handling users with multiple SIMs (e.g., smartphone and smartwatch sharing a number) presents a challenge. The specification suggests using 3-legged authentication tokens to uniquely identify the specific device in use. Additionally, the API includes specific error codes (e.g., `AREA\_NOT\_COVERED`) to inform the application if the requested geofence is outside the operator's service territory.
+    
+    \paragraph{Use Cases}
+    This verification-based approach is critical for industries that require location assurance without tracking:
+    \begin{itemize}
+        \item \textbf{FinTech Security:} Banks can verify if a card transaction occurring in a specific city aligns with the user's mobile location, blocking withdrawals if the device is detected elsewhere.
+        \item \textbf{Content Rights Management:} Streaming services can enforce geo-blocking rules (e.g., sports broadcasting rights limited to a specific country) by verifying the user's presence in the allowed region, preventing VPN-based spoofing.
+        \item \textbf{Smart Mobility:} Rental services for bikes or scooters can confirm that a vehicle is being returned within a designated parking zone before ending the billing session.
+    \end{itemize}
+
+    \subsubsection{QoS Profiles}
+    \label{subsubsec:qos_profiles}
+    
+    The QoS Profiles API acts as a capability discovery mechanism within the CAMARA framework. Before an application requests a specific quality of service modification (via the Quality on Demand API), it must first understand which service levels are available for a specific user connection. This API allows consumers to retrieve the set of QoS profiles supported by the network operator, characterized by parameters such as latency, throughput, and jitter priority \cite{camara_qos_profiles}.
+    
+    \paragraph{Motivation and Abstraction}
+    In 5G networks, quality of service is technically managed through complex 3GPP parameters like 5G QoS Identifiers (5QI). Application developers, however, typically think in terms of business requirements (e.g., "Low Latency" for gaming or "High Throughput" for 4K video). The QoS Profiles API bridges this gap by mapping these complex network configurations to abstract, human-readable profile names. This ensures that developers can request service levels without needing deep knowledge of the underlying radio access technology.
+    
+    \paragraph{Functionality and Data Model}
+    The API exposes a retrieval operation that accepts a user identifier (such as an IP address or MSISDN). The network validates the user's subscription and current network conditions (e.g., roaming status) and returns a list of applicable profiles.
+    
+    The following JSON snippet demonstrates a standard response, where the network offers a "Low Latency" profile (suitable for real-time control) and a "High Throughput" profile (suitable for video streaming):
+    
+    \begin{verbatim}
+    [
+       {
+          "name": "QOS_L",
+          "description": "Low Latency profile",
+          "status": "ACTIVE"
+       },
+       {
+          "name": "QOS_VC",
+          "description": "Video calling profile",
+          "status": "ACTIVE"
+       }
+    ]
+    \end{verbatim}
+    
+    \paragraph{Use Cases}
+    This discovery capability is a prerequisite for dynamic network adaptation:
+    \begin{itemize}
+        \item \textbf{Pre-flight Checks:} A cloud gaming application can query the available profiles at application startup. If the "Low Latency" profile is not available (e.g., due to the user being in a congested cell), the application can automatically downgrade the video resolution or warn the user, managing expectations before the session begins.
+        \item \textbf{Roaming Adaptation:} Since QoS capabilities vary between operators, this API allows applications to dynamically discover which profiles are valid when a user travels to a different country/operator network.
+    \end{itemize}
+
+    \subsubsection{Quality on Demand (QoD)}
+    \label{subsubsec:quality_on_demand}
+    
+    The Quality on Demand (QoD) API is widely regarded as the flagship capability of the CAMARA initiative, transforming the mobile network from a static "best-effort" transport pipe into a programmable platform. It allows authorized applications to dynamically request stable latency, reduced jitter, or prioritized throughput for a specific user session. By abstracting complex 5G Quality of Service (QoS) mechanisms—such as Network Slicing or Dedicated Bearers—into a simple RESTful interface, it enables developers to align network performance with application requirements in real-time \cite{camara_quality_on_demand}.
+    
+    \paragraph{Motivation and Problem Statement}
+    In traditional mobile networks, all traffic is typically treated equally under a "best-effort" policy. While sufficient for web browsing, this model is inadequate for time-critical applications like cloud gaming, remote machinery control, or autonomous mobility. In these scenarios, a temporary congestion spike can cause packet loss or lag, rendering the service unusable. The QoD API addresses this by allowing an application to "book" specific network resources for a defined duration, effectively guaranteeing a Service Level Agreement (SLA) for that specific data flow.
+    
+    \paragraph{Functionality and Session Management}
+    The core mechanism of the API is the management of \textbf{QoS Sessions}. An application (the API consumer) initiates a session by sending a request to the `/sessions` endpoint. The request must specify:
+    \begin{itemize}
+        \item \textbf{Device:} The target user (identified by IP or Phone Number).
+        \item \textbf{QoS Profile:} The desired service level (e.g., \texttt{QOS_L} for Low Latency), which should be selected from the catalog exposed by the QoS Profiles API.
+        \item \textbf{Duration:} How long the priority handling should last (in seconds).
+    \end{itemize}
+    
+    Upon receiving the request, the network validates the user's eligibility and cell capacity. If resources are available, it instantiates the policy (e.g., assigning a higher 5QI value in the 5G Core) and returns a session ID. The application can subsequently extend or terminate this session as needed.
+    
+    \paragraph{Data Model}
+    The following JSON snippet illustrates a request to create a 10-minute "Low Latency" session for a specific device IP, a typical pattern for a real-time controller or gaming session:
+    
+    \begin{verbatim}
+    // POST /sessions
+    Request:
+    {
+      "qosProfile": "QOS_L",
+      "device": {
+        "ipv4Address": {
+          "publicAddress": "84.125.93.10",
+          "publicPort": 59765
+        }
+      },
+      "duration": 600
+    }
+    
+    Response:
+    {
+      "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "qosStatus": "ACTIVE",
+      "startedAt": "2024-03-20T10:00:00Z",
+      "expiresAt": "2024-03-20T10:10:00Z"
+    }
+    \end{verbatim}
+    
+    \paragraph{Use Cases}
+    This capability enables a new class of network-aware applications:
+    \begin{itemize}
+        \item \textbf{Real-Time Immersion:} Cloud gaming and XR (Extended Reality) applications can request a low-latency profile (`QOS_L`) to minimize motion-to-photon delay, preventing motion sickness and input lag.
+        \item \textbf{Critical Communications:} In the "Smart Pet Tracker" or logistics scenarios, if a device enters a congested area during an emergency, the backend can invoke QoD to prioritize the video/control stream, ensuring connectivity remains robust even when the cell tower is saturated.
+        \item \textbf{Remote Operations:} Tele-operation of drones or industrial robots requires a guarantee that command signals arrive within a specific time window, which QoD enforces.
+    \end{itemize}
 
 \section{Real-World CAMARA-Based Use Cases}
 \label{sec:camara_use_cases}
