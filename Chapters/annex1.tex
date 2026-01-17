@@ -1,0 +1,62 @@
+%!TEX root = ../template.tex
+\typeout{NT FILE annex1.tex}%
+
+\chapter{Annex 1}
+\label{ann:lorem_ipsum1}
+
+\begin{table}[H] % [H] requer o pacote \usepackage{float} no template.tex
+    \centering
+    % Puxa a tabela para cima para não bater no fundo da página
+    \vspace{-1.5cm} 
+    
+    \begin{adjustbox}{angle=90, center}
+        % Reduzi para 0.70 para dar espaço ao título do capítulo e evitar o rodapé
+        \begin{minipage}{0.70\textheight} 
+            \tiny % 'tiny' é o ideal para que as 7 colunas não transbordem lateralmente
+            \centering
+            \captionof{table}{Mature CAMARA APIs grouped by exposed capability category}
+            \label{tab:camara_api_classification_final}
+            
+            \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+            
+            \begin{tabularx}{\textwidth}{@{}YYYYYYY@{}}
+                \toprule
+                \textbf{Authentication \& Fraud Prevention} & 
+                \textbf{Location Services} & 
+                \textbf{Communication Services} & 
+                \textbf{Communication Quality} & 
+                \textbf{Device Information} & 
+                \textbf{Computing Services} & 
+                \textbf{Payments and Charging} \\ 
+                \midrule
+                
+                Call Forwarding Signal & Geofencing Subscriptions & WebRTC Call Handling & Application Profiles & Connected Network Type & Simple Edge Discovery & Blockchain Public Address \\ \addlinespace
+                
+                Customer Insights & Location Retrieval & WebRTC Event Subscription & Connectivity Insights & Connected Network Type Subscriptions & & Carrier Billing \\ \addlinespace
+                
+                Device Swap & Location Verification & WebRTC Registration & Connectivity Insights Subscriptions & Device Identifier & & Carrier Billing Refund \\ \addlinespace
+                
+                Know Your Customer Age Verification & Population Density Data & & QoS Profiles & Device Reachability Status & & \\ \addlinespace
+                
+                Know Your Customer Fill In & Region Device Count & & QoS Provisioning & Device Reachability Status Subscriptions & & \\ \addlinespace
+                
+                Know Your Customer Match & & & Quality on Demand (QoD) & Device Roaming Status & & \\ \addlinespace
+                
+                Know Your Customer Tenure & & & & Device Roaming Status Subscriptions & & \\ \addlinespace
+                
+                Number Recycling & & & & & & \\ \addlinespace
+                
+                Number Verification & & & & & & \\ \addlinespace
+                
+                One Time Password SMS & & & & & & \\ \addlinespace
+                
+                Scam Signal & & & & & & \\ \addlinespace
+                
+                SIM Swap & & & & & & \\ \addlinespace
+                
+                SIM Swap Subscriptions & & & & & & \\
+                \bottomrule
+            \end{tabularx}
+        \end{minipage}
+    \end{adjustbox}
+\end{table}

@@ -14,11 +14,11 @@
 \section{Introduction}
 \label{sec:Introduction}
 
-This chapter provides the conceptual and technical foundations that support the work to be developed in this dissertation. It begins by introducing the CAMARA project, explaining its role in the standardization of network APIs. Subsequently, the CAMARA APIs implemented by MEO are examined, which will create the basis for the practical work to be developed later. The chapter concludes with an analysis of real-world use cases that demonstrate the applicability and reliance of CAMARA-based APIs.
+This chapter provides the conceptual and technical foundations that support the work to be developed in this dissertation. It begins by introducing the CAMARA project, explaining its role in the standardization of network APIs. Subsequently, the  CAMARA APIs selected for this study are examined, which will create the basis for the practical work to be developed later. The chapter concludes with an analysis of real-world use cases that demonstrate the applicability and reliance of CAMARA-based APIs.
 
-To understand the purpose and design of the CAMARA project, it helps to first clarify the main ideas behind programmability and capability exposure in modern 5G networks. Current fifth-generation systems represent a shift toward software-driven architectures, where tools like Software-Defined Networking (SDN) and Network Function Virtualization (NFV) give operators much more freedom in how they configure and manage network behaviour \cite{BARAKABITZE2020106984, BONATI2020107516}. However, for this flexibility to be useful beyond the operator’s own systems, it also needs to be made available to external applications and service providers. This is enabled through standardized exposure mechanisms, with 3GPP’s northbound interfaces serving as the primary framework for this interaction \cite{MICHAELIDES2025107645}. 
+To understand the purpose and design of the CAMARA project, it helps to first clarify the main ideas behind programmability and capability exposure in modern 5G networks. Current fifth-generation systems represent a shift toward software-driven architectures, where tools like Software-Defined Networking (SDN) and Network Function Virtualization (NFV) give operators much more freedom in how they configure and manage network behaviour \cite{BARAKABITZE2020106984, BONATI2020107516}. However, for this flexibility to be useful beyond the operator’s own systems, it also needs to be made available to external applications and service providers. This is enabled through standardized exposure mechanisms, with 3GPP’s northbound interfaces serving as the primary framework for this interaction \cite{MICHAELIDES2025107645}.
 
-In this context, network APIs function as an abstraction layer that presents complex network capabilities in a more manageable and secure form. They reduce the need for developers to engage directly with detailed network operations while still maintaining interoperability across different systems \cite{BONATI2020107516}. These concepts are important for understanding CAMARA’s effort to provide a common approach to API exposure among operators, and they offer the technical background needed for the discussion of MEO’s CAMARA APIs later in the chapter.
+In this context, network APIs function as an abstraction layer that presents complex network capabilities in a more manageable and secure form. They reduce the need for developers to engage directly with detailed network operations while still maintaining interoperability across different systems \cite{BONATI2020107516}. These concepts are important for understanding CAMARA’s effort to provide a common approach to API exposure among operators, and they offer the technical background needed for the discussion of the selected CAMARA APIs later in the chapter.
 
 \section{The CAMARA Project}
 \label{sec:camara_project}
@@ -119,10 +119,10 @@ In this context, network APIs function as an abstraction layer that presents com
 
     The CAMARA API Catalog defines the standardized network APIs provided by the CAMARA project. Each API represents a specific network capability and follows a common structure and set of behaviors. This allows applications to interact with network functions in a consistent way across different operators. The APIs are organized around exposed capabilities rather than underlying network technologies. As a result, implementation details are hidden, and applications can be developed in a more portable and interoperable manner \cite{camara_api_overview}.
 
-    In practice, the APIs included in the CAMARA catalog represent a shared reference rather than a mandatory implementation set. Mobile network operators may choose to implement a subset of the available APIs depending on technical readiness, regulatory considerations, and business priorities. For this reason, the following section focuses on the CAMARA APIs implemented by MEO, which form the technical basis for the analysis and use cases developed later in this dissertation \cite{camara_scope}.
+    In practice, the APIs included in the CAMARA catalog represent a shared reference rather than a mandatory implementation set. Mobile network operators may choose to implement a subset of the available APIs depending on technical readiness, regulatory considerations, and business priorities. For this reason, the following section focuses on the specific set of CAMARA APIs selected for this dissertation, which form the technical basis for the analysis and use cases developed later \cite{camara_scope}.
 
 \section{CAMARA APIs - Technical Overview}
-\label{sec:meo_camara_apis}
+\label{sec:selected_camara_apis}
 
     \subsection{Overview and API Classification}
     \label{subsec:Overview_and_API_classification}
@@ -131,89 +131,20 @@ In this context, network APIs function as an abstraction layer that presents com
 
     In the CAMARA project, network APIs are defined by the capabilities they expose rather than by the network technologies used to implement them. This makes it possible for application developers to work with network functionality at a higher level, without needing to understand operator-specific details. On this basis, APIs can be grouped into functional domains such as authentication and fraud prevention, location services, device information, and communication quality management.
     
-    For the purposes of this dissertation, only CAMARA APIs that are considered mature are taken into account. These APIs are regarded as stable and suitable for practical use, and they represent capabilities that are sufficiently standardized for deployment across multiple operators. Table~\ref{tab:camara_api_classification} provides an overview of the mature CAMARA APIs examined in this work, grouped by capability category and based on the official CAMARA API overview \cite{camara_api_overview}.
-
-
-
-\begin{table}[ht]
-    \centering
-    \scriptsize
-    % Define um novo tipo de coluna Y que alinha à esquerda e ajusta a largura
-    \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+    For the purposes of this dissertation, only CAMARA APIs that are considered mature are taken into account. These APIs are regarded as stable and suitable for practical use, and they represent capabilities that are sufficiently standardized for deployment across multiple operators.
     
-    % --- SUBTABELA A ---
-    \begin{subtable}{\textwidth}
-        \centering
-        \caption{Authentication, Location, Communication Services, and Communication Quality}
-        \label{tab:camara_api_classification_a}
-        
-        % 4 colunas iguais (Y)
-        \begin{tabularx}{\textwidth}{YYYY}
-            \toprule
-            \textbf{Authentication \& Fraud Prevention} &
-            \textbf{Location Services} &
-            \textbf{Communication Services} &
-            \textbf{Communication Quality} \\
-            \midrule
-            Call Forwarding Signal & Geofencing Subscriptions & WebRTC Call Handling & Application Profiles \\
-            Customer Insights & Location Retrieval & WebRTC Event Subscription & Connectivity Insights \\
-            Device Swap & Location Verification & WebRTC Registration & Connectivity Insights Subscriptions \\
-            Know Your Customer Age Verification & Population Density Data & & QoS Profiles \\
-            Know Your Customer Fill In & Region Device Count & & QoS Provisioning \\
-            Know Your Customer Match & & & Quality on Demand (QoD) \\
-            Know Your Customer Tenure & & & \\
-            Number Recycling & & & \\
-            Number Verification & & & \\
-            One Time Password SMS & & & \\
-            Scam Signal & & & \\
-            SIM Swap & & & \\
-            SIM Swap Subscriptions & & & \\
-            \bottomrule
-        \end{tabularx}
-    \end{subtable}
-
-    \vspace{0.5cm}
-
-    % --- SUBTABELA B (Coluna Service Management Removida) ---
-    \begin{subtable}{\textwidth}
-        \centering
-        \caption{Device Information, Computing Services, and Payments}
-        \label{tab:camara_api_classification_b}
-        
-        % 3 colunas iguais (Y) - Service Management removido
-        \begin{tabularx}{\textwidth}{YYY}
-            \toprule
-            \textbf{Device Information} &
-            \textbf{Computing Services} &
-            \textbf{Payments and Charging} \\
-            \midrule
-            Connected Network Type & Simple Edge Discovery & Blockchain Public Address \\
-            Connected Network Type Subscriptions & & Carrier Billing \\
-            Device Identifier & & Carrier Billing Refund \\
-            Device Reachability Status & & \\
-            Device Reachability Status Subscriptions & & \\
-            Device Roaming Status & & \\
-            Device Roaming Status Subscriptions & & \\
-            \bottomrule
-        \end{tabularx}
-    \end{subtable}
-    \caption{Mature CAMARA APIs grouped by exposed capability category}
-    \label{tab:camara_api_classification}
-\end{table}
-
+    Table~\ref{tab:camara_api_classification_final} in Annex~\ref{ann:lorem_ipsum1} provides an overview of the mature CAMARA APIs examined in this work, grouped by capability category and based on the official CAMARA API overview \cite{camara_api_overview}.
 
     The following section contextualizes this general classification by examining the subset of CAMARA APIs made available within a specific operator environment.
 
-\clearpage
+    \subsection{Selected CAMARA APIs}
+    \label{subsec:selected_apis}
 
-    \subsection{MEO CAMARA APIs}
-    \label{subsec:meo_camara_apis}
-
-    To support the development of this dissertation, MEO provided access to a selected set of CAMARA APIs within the scope of the \textit{5G Sprint} project. This initiative enabled experimentation with standardized network APIs in both sandbox and production environments, including the possibility of testing with real SIM cards.
+    To support the development of this dissertation, a specific subset of CAMARA APIs was selected for analysis and experimentation. These APIs were chosen based on their maturity within the CAMARA project and their relevance to the proposed use cases. The selection focuses on APIs that are readily available in standard reference implementations and sandbox environments, enabling practical validation of interaction flows between applications and network capabilities.
     
-    In total, six CAMARA APIs were made available by MEO for this work. These APIs cover key network capabilities that are representative of the CAMARA ecosystem and suitable for practical experimentation. The APIs provided by MEO are: SIM Swap, Devoce Idenifier, Location Retrieval, Location Verification, Quality of Service Profiles, and Quality on Demand.  
+    In total, six CAMARA APIs are analyzed in this work. These APIs cover key network capabilities that are representative of the CAMARA ecosystem and suitable for practical experimentation. The selected APIs are: SIM Swap, Device Identifier, Location Retrieval, Location Verification, Quality of Service Profiles, and Quality on Demand.
     
-    The availability of these APIs in controlled testing environments allowed the validation of real interaction flows between applications and network capabilities, bridging the gap between specification and operational usage. In the following section, each of these APIs is described in detail, including its functionality, invocation model, and technical characteristics.
+    In the following section, each of these APIs is described in detail, including its functionality, invocation model, and technical characteristics.
 
     \subsection{APIs Explained}
     \label{subsec:apis_explained}
@@ -230,13 +161,13 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Functionality}
     The CAMARA specification defines three primary resources to retrieve device information based on the level of detail required:
     \begin{itemize}
-        \item \textbf{Retrieve Identifier (`/retrieve-identifier`):} Returns the full unique identifier of the device, specifically the IMEI (15 digits) or the IMEI Software Version (IMEISV, 16 digits).
-        \item \textbf{Retrieve Type (`/retrieve-type`):} Returns only the manufacturer, model, and Type Allocation Code (TAC), without exposing the unique serial number of the user's equipment.
-        \item \textbf{Retrieve Pseudonym (`/retrieve-ppid`):} Returns a pseudonymised identifier (PPID) that is unique to the API consumer but persistent for the device, enabling privacy-preserving tracking.
+        \item {Retrieve Identifier (`/retrieve-identifier`):} Returns the full unique identifier of the device, specifically the IMEI (15 digits) or the IMEI Software Version (IMEISV, 16 digits).
+        \item {Retrieve Type (`/retrieve-type`):} Returns only the manufacturer, model, and Type Allocation Code (TAC), without exposing the unique serial number of the user's equipment.
+        \item {Retrieve Pseudonym (`/retrieve-ppid`):} Returns a pseudonymised identifier (PPID) that is unique to the API consumer but persistent for the device, enabling privacy-preserving tracking.
     \end{itemize}
     
     \paragraph{Data Model}
-    The core data object returned by the API characterizes the physical device. The IMEI is a 15-digit integer where the first 8 digits are the Type Allocation Code (TAC), identifying the manufacturer and model, followed by a 6-digit serial number. 
+    The core data object returned by the API characterizes the physical device. The IMEI is a 15-digit integer where the first 8 digits are the Type Allocation Code (TAC), identifying the manufacturer and model, followed by a 6-digit serial number.
     
     The following JSON snippet illustrates a typical response payload for the identifier retrieval, including the timestamp of the last verification:
     
@@ -261,8 +192,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To invoke the API, the consumer must identify the mobile subscription. The identification method depends on the authentication flow used:
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The API consumer must explicitly provide a subject identifier in the request body. Supported identifiers include the Phone Number (MSISDN), the IP Address (IPv4 or IPv6), or a Network Access Identifier (NAI). For IPv4, the public port is typically required to handle Carrier-Grade NAT (CGNAT).
-        \item \textbf{Three-legged Access Token:} The subject identifier \textbf{MUST NOT} be provided in the request. The device is uniquely identified implicitly from the access token, which is generated based on user consent during the authentication process.
+        \item {Two-legged Access Token:} The API consumer must explicitly provide a subject identifier in the request body. Supported identifiers include the Phone Number (MSISDN), the IP Address (IPv4 or IPv6), or a Network Access Identifier (NAI). For IPv4, the public port is typically required to handle Carrier-Grade NAT (CGNAT).
+        \item {Three-legged Access Token:} The subject identifier {MUST NOT} be provided in the request. The device is uniquely identified implicitly from the access token, which is generated based on user consent during the authentication process.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -271,18 +202,18 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API defines specific HTTP error responses to handle identification issues:
     \begin{itemize}
-        \item \textbf{404 IDENTIFIER\_NOT\_FOUND:} The device identified in the request is not managed by the API provider.
-        \item \textbf{422 SERVICE\_NOT\_APPLICABLE:} A device identifier cannot be provided for the target (e.g., the phone number identifies a landline).
-        \item \textbf{422 MISSING\_IDENTIFIER:} The subject cannot be identified from the access token, and no device object was provided in the request.
-        \item \textbf{422 UNNECESSARY\_IDENTIFIER:} A device object was provided in the request, but the subject was already identified via a 3-legged access token.
+        \item {404 IDENTIFIER\_NOT\_FOUND:} The device identified in the request is not managed by the API provider.
+        \item {422 SERVICE\_NOT\_APPLICABLE:} A device identifier cannot be provided for the target (e.g., the phone number identifies a landline).
+        \item {422 MISSING\_IDENTIFIER:} The subject cannot be identified from the access token, and no device object was provided in the request.
+        \item {422 UNNECESSARY\_IDENTIFIER:} A device object was provided in the request, but the subject was already identified via a 3-legged access token.
     \end{itemize}
     
     \paragraph{Use Cases}
     The ability to retrieve trusted device information supports several business scenarios:
     \begin{itemize}
-        \item \textbf{Security and Fraud Prevention:} Establishing that a customer is not using a device they previously reported as lost or stolen, or verifying device possession for authentication.
-        \item \textbf{Insurance:} Automatically populating device details (make, model, IMEI) when a customer wishes to insure a device, preventing input errors.
-        \item \textbf{Service Optimization:} Adapting content delivery or software versions based on the specific device model or OS type detected by the network.
+        \item {Security and Fraud Prevention:} Establishing that a customer is not using a device they previously reported as lost or stolen, or verifying device possession for authentication.
+        \item {Insurance:} Automatically populating device details (make, model, IMEI) when a customer wishes to insure a device, preventing input errors.
+        \item {Service Optimization:} Adapting content delivery or software versions based on the specific device model or OS type detected by the network.
     \end{itemize}
 
     \subsubsection{SIM Swap}
@@ -297,12 +228,12 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Functionality}
     The API offers a programmable interface to query the SIM status through two primary operations:
     \begin{itemize}
-        \item \textbf{Retrieve Date (`/retrieve-date`):} Provides the timestamp of the latest SIM swap event. If no swap has been performed within the operator's data retention period, the API may return the SIM activation date. If regulations or privacy policies prevent returning the date, a \texttt{null} value is returned.
-        \item \textbf{Check (`/check`):} Validates whether a SIM swap has occurred during a past period defined by the \texttt{maxAge} attribute (e.g., the last 24 hours). This allows for a boolean verification without exposing the exact timestamp.
+        \item {Retrieve Date (`/retrieve-date`):} Provides the timestamp of the latest SIM swap event. If no swap has been performed within the operator's data retention period, the API may return the SIM activation date. If regulations or privacy policies prevent returning the date, a \texttt{null} value is returned.
+        \item {Check (`/check`):} Validates whether a SIM swap has occurred during a past period defined by the \texttt{maxAge} attribute (e.g., the last 24 hours). This allows for a boolean verification without exposing the exact timestamp.
     \end{itemize}
     
     \paragraph{Data Model}
-    The API typically returns a JSON object containing the timestamp of the last swap or a boolean indicator, depending on the endpoint called. 
+    The API typically returns a JSON object containing the timestamp of the last swap or a boolean indicator, depending on the endpoint called.
     
     The following JSON snippet illustrates a response from the \texttt{retrieve-date} endpoint, indicating the precise moment the SIM was last changed:
     
@@ -315,8 +246,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To invoke the API, the consumer must identify the phone number as the subject. The method of identification depends on the authorization flow:
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The phone number MUST be explicitly provided in the request body (e.g., via a \texttt{phoneNumber} identifier).
-        \item \textbf{Three-legged Access Token:} The phone number MUST NOT be provided in the request body. The subject is uniquely identified implicitly from the access token, which is associated with the user during the authentication process.
+        \item {Two-legged Access Token:} The phone number MUST be explicitly provided in the request body (e.g., via a \texttt{phoneNumber} identifier).
+        \item {Three-legged Access Token:} The phone number MUST NOT be provided in the request body. The subject is uniquely identified implicitly from the access token, which is associated with the user during the authentication process.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -325,18 +256,18 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API defines specific error codes to handle invalid requests or privacy constraints:
     \begin{itemize}
-        \item \textbf{400 OUT\_OF\_RANGE:} The \texttt{maxAge} parameter in a check request exceeds the operator's allowed monitoring period (e.g., 2400 hours) or local regulations.
-        \item \textbf{422 MISSING\_IDENTIFIER:} The phone number cannot be identified from the access token and was not included in the request body.
-        \item \textbf{422 UNNECESSARY\_IDENTIFIER:} A phone number was provided in the request body, but the subject was already identified via a 3-legged access token.
-        \item \textbf{501 NOT\_IMPLEMENTED:} Returned if a specific functionality is explicitly not supported by the implementation.
+        \item {400 OUT\_OF\_RANGE:} The \texttt{maxAge} parameter in a check request exceeds the operator's allowed monitoring period (e.g., 2400 hours) or local regulations.
+        \item {422 MISSING\_IDENTIFIER:} The phone number cannot be identified from the access token and was not included in the request body.
+        \item {422 UNNECESSARY\_IDENTIFIER:} A phone number was provided in the request body, but the subject was already identified via a 3-legged access token.
+        \item {501 NOT\_IMPLEMENTED:} Returned if a specific functionality is explicitly not supported by the implementation.
     \end{itemize}
     
     \paragraph{Use Cases}
     The ability to verify the integrity of the SIM-MSISDN association enables several critical security applications:
     \begin{itemize}
-        \item \textbf{Fraud Prevention in Banking:} Financial institutions can query the API during suspicious transactions to ensure the user's SIM has not been compromised recently.
-        \item \textbf{Password Reset Protection:} Online service providers (e-commerce, social networks) can verify SIM status before sending SMS OTPs for password recovery to prevent account takeover.
-        \item \textbf{Non-Automated Actions:} Supporting call center experts by confirming the stability of the user's line before performing sensitive operations manually.
+        \item {Fraud Prevention in Banking:} Financial institutions can query the API during suspicious transactions to ensure the user's SIM has not been compromised recently.
+        \item {Password Reset Protection:} Online service providers (e-commerce, social networks) can verify SIM status before sending SMS OTPs for password recovery to prevent account takeover.
+        \item {Non-Automated Actions:} Supporting call center experts by confirming the stability of the user's line before performing sensitive operations manually.
     \end{itemize}
 
     \subsubsection{Location Retrieval}
@@ -351,12 +282,12 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Functionality}
     The API exposes a single endpoint (`/retrieve`) to obtain the device location. The requester can optionally constrain the quality of the data using two parameters:
     \begin{itemize}
-        \item \textbf{Max Age (`maxAge`):} Specifies the maximum acceptable age of the location information in seconds. A value of `0` requests a fresh calculation. If omitted, any cached age is acceptable.
-        \item \textbf{Max Surface (`maxSurface`):} Specifies the maximum acceptable surface area in square meters. This controls the accuracy; if the network cannot locate the device within this limit, it returns an error.
+        \item {Max Age (`maxAge`):} Specifies the maximum acceptable age of the location information in seconds. A value of `0` requests a fresh calculation. If omitted, any cached age is acceptable.
+        \item {Max Surface (`maxSurface`):} Specifies the maximum acceptable surface area in square meters. This controls the accuracy; if the network cannot locate the device within this limit, it returns an error.
     \end{itemize}
     
     \paragraph{Data Model}
-    The API returns a JSON object containing the location area and a timestamp (`lastLocationTime`) indicating when the device was localized. 
+    The API returns a JSON object containing the location area and a timestamp (`lastLocationTime`) indicating when the device was localized.
     
     The following JSON snippet illustrates a typical response where the area is defined as a circle:
     
@@ -377,8 +308,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To invoke the API, the consumer must identify the target device. The identification method relies on the authentication flow:
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The subject must be identified from an optional `device` object in the request body (e.g., PhoneNumber, IPv4, IPv6).
-        \item \textbf{Three-legged Access Token:} The `device` object MUST NOT be provided. The subject is uniquely identified from the access token itself, ensuring transparency and compliance with user-centric privacy-by-design principles.
+        \item {Two-legged Access Token:} The subject must be identified from an optional `device` object in the request body (e.g., PhoneNumber, IPv4, IPv6).
+        \item {Three-legged Access Token:} The `device` object MUST NOT be provided. The subject is uniquely identified from the access token itself, ensuring transparency and compliance with user-centric privacy-by-design principles.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -392,19 +323,19 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API utilizes specific HTTP error codes to communicate retrieval failures:
     \begin{itemize}
-        \item \textbf{422 UNABLE\_TO\_LOCATE:} The system cannot determine the device's location.
-        \item \textbf{422 UNABLE\_TO\_FULFILL\_MAX\_AGE:} The system cannot provide location data fresher than the requested `maxAge`.
-        \item \textbf{422 UNABLE\_TO\_FULFILL\_MAX\_SURFACE:} The system cannot provide an area within the requested `maxSurface` limit.
-        \item \textbf{404 IDENTIFIER\_NOT\_FOUND:} The provided identifier cannot be matched to a known device.
+        \item {422 UNABLE\_TO\_LOCATE:} The system cannot determine the device's location.
+        \item {422 UNABLE\_TO\_FULFILL\_MAX\_AGE:} The system cannot provide location data fresher than the requested `maxAge`.
+        \item {422 UNABLE\_TO\_FULFILL\_MAX\_SURFACE:} The system cannot provide an area within the requested `maxSurface` limit.
+        \item {404 IDENTIFIER\_NOT\_FOUND:} The provided identifier cannot be matched to a known device.
     \end{itemize}
     
     \paragraph{Use Cases}
     Trusted location data supports various critical scenarios:
     \begin{itemize}
-        \item \textbf{Fraud Prevention:} Verifying if a financial transaction or high-value purchase originates from a location consistent with the user's expected region.
-        \item \textbf{Contextual Advertising:} Triggering promotions only when verifying the device is physically within a specific area of interest (e.g., a shopping district).
-        \item \textbf{Smart Mobility:} Obtaining the location of shared vehicles (bikes/scooters) to guarantee they are rented or parked correctly.
-        \item \textbf{Emergency Services:} Providing accurate location information to responders when GPS is unavailable.
+        \item {Fraud Prevention:} Verifying if a financial transaction or high-value purchase originates from a location consistent with the user's expected region.
+        \item {Contextual Advertising:} Triggering promotions only when verifying the device is physically within a specific area of interest (e.g., a shopping district).
+        \item {Smart Mobility:} Obtaining the location of shared vehicles (bikes/scooters) to guarantee they are rented or parked correctly.
+        \item {Emergency Services:} Providing accurate location information to responders when GPS is unavailable.
     \end{itemize}
 
     \subsubsection{Location Verification}
@@ -419,14 +350,14 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Functionality}
     The API exposes a single endpoint (`/verify`) that triggers a process to confirm or contradict the client's assumption about the device location. The verification logic produces three possible outcomes:
     \begin{itemize}
-        \item \textbf{TRUE:} The network's estimation of the device's location is fully contained within the requested area.
-        \item \textbf{FALSE:} The device location does not overlap with the requested area at all.
-        \item \textbf{PARTIAL:} The device location partially overlaps or fully contains the requested area (because the network area is larger). In this case, a `matchRate` percentage may be included to estimate the likelihood of the match.
+        \item {TRUE:} The network's estimation of the device's location is fully contained within the requested area.
+        \item {FALSE:} The device location does not overlap with the requested area at all.
+        \item {PARTIAL:} The device location partially overlaps or fully contains the requested area (because the network area is larger). In this case, a `matchRate` percentage may be included to estimate the likelihood of the match.
     \end{itemize}
     Clients can also specify a `maxAge` parameter. If the location information known to the server is older than this value, an error is returned independently of the result.
     
     \paragraph{Data Model}
-    The core response object contains the boolean-like verification result and optionally the time of the last location check. 
+    The core response object contains the boolean-like verification result and optionally the time of the last location check. 
     
     The following JSON snippet illustrates a response where the verification was successful (Partial match) with a specific probability:
     
@@ -441,8 +372,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To invoke the API, the consumer must identify the device. The methodology is dictated by the token type:
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The subject must be explicitly identified via the `device` object (e.g., PhoneNumber, IPv4) in the request body.
-        \item \textbf{Three-legged Access Token:} The `device` object \textbf{MUST NOT} be provided. The subject is uniquely identified from the access token, which is mandatory when users exercise rights such as opt-in/opt-out for personal data processing.
+        \item {Two-legged Access Token:} The subject must be explicitly identified via the `device` object (e.g., PhoneNumber, IPv4) in the request body.
+        \item {Three-legged Access Token:} The `device` object {MUST NOT} be provided. The subject is uniquely identified from the access token, which is mandatory when users exercise rights such as opt-in/opt-out for personal data processing.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -456,18 +387,18 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API defines specific error codes for location constraints:
     \begin{itemize}
-        \item \textbf{422 AREA\_NOT\_COVERED:} The provided area is outside the operator's coverage.
-        \item \textbf{422 INVALID\_AREA:} Legal restrictions or implementation issues force the operator to reject the area (e.g., the requested radius is too small for privacy compliance).
-        \item \textbf{422 UNABLE\_TO\_LOCATE:} The network cannot locate the device.
-        \item \textbf{422 UNABLE\_TO\_FULFILL\_MAX\_AGE:} Fresh location data cannot be obtained within the requested `maxAge`.
+        \item {422 AREA\_NOT\_COVERED:} The provided area is outside the operator's coverage.
+        \item {422 INVALID\_AREA:} Legal restrictions or implementation issues force the operator to reject the area (e.g., the requested radius is too small for privacy compliance).
+        \item {422 UNABLE\_TO\_LOCATE:} The network cannot locate the device.
+        \item {422 UNABLE\_TO\_FULFILL\_MAX\_AGE:} Fresh location data cannot be obtained within the requested `maxAge`.
     \end{itemize}
     
     \paragraph{Use Cases}
     The verification model supports high-security and geo-compliance scenarios:
     \begin{itemize}
-        \item \textbf{FinTech Fraud Prevention:} Banks can verify if a user attempting a transaction in a specific city is physically present there, detecting card cloning or remote attacks.
-        \item \textbf{Geo-blocking and Content Rights:} Media services can verify if a user is in an authorized region for streaming content, preventing VPN circumvention.
-        \item \textbf{Smart Mobility:} Confirming that a rented vehicle (bike/scooter) is located within a valid parking zone before ending the rental session.
+        \item {FinTech Fraud Prevention:} Banks can verify if a user attempting a transaction in a specific city is physically present there, detecting card cloning or remote attacks.
+        \item {Geo-blocking and Content Rights:} Media services can verify if a user is in an authorized region for streaming content, preventing VPN circumvention.
+        \item {Smart Mobility:} Confirming that a rented vehicle (bike/scooter) is located within a valid parking zone before ending the rental session.
     \end{itemize}
 
     \subsubsection{QoS Profiles}
@@ -505,8 +436,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To invoke the API, the consumer must identify the target subscription to determine eligibility. The addressing follows the standard CAMARA security profile:
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The consumer must provide the device identifier (e.g., Phone Number, IPv4 address) in the query parameters or request body.
-        \item \textbf{Three-legged Access Token:} The device identifier is derived implicitly from the token (bound to the user's consent), and explicit identifiers in the request are omitted.
+        \item {Two-legged Access Token:} The consumer must provide the device identifier (e.g., Phone Number, IPv4 address) in the query parameters or request body.
+        \item {Three-legged Access Token:} The device identifier is derived implicitly from the token (bound to the user's consent), and explicit identifiers in the request are omitted.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -515,17 +446,17 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API uses standard HTTP error codes to indicate retrieval issues:
     \begin{itemize}
-        \item \textbf{401 UNAUTHENTICATED:} The access token is missing or invalid.
-        \item \textbf{403 PERMISSION\_DENIED:} The client does not have the scope to read QoS profiles.
-        \item \textbf{404 IDENTIFIER\_NOT\_FOUND:} The requested device or subscription could not be found.
-        \item \textbf{501 NOT\_IMPLEMENTED:} The discovery functionality is not supported by the specific operator implementation.
+        \item {401 UNAUTHENTICATED:} The access token is missing or invalid.
+        \item {403 PERMISSION\_DENIED:} The client does not have the scope to read QoS profiles.
+        \item {404 IDENTIFIER\_NOT\_FOUND:} The requested device or subscription could not be found.
+        \item {501 NOT\_IMPLEMENTED:} The discovery functionality is not supported by the specific operator implementation.
     \end{itemize}
     
     \paragraph{Use Cases}
     The discovery capability enables adaptive application behavior:
     \begin{itemize}
-        \item \textbf{Pre-flight Validation:} A cloud gaming application can check if the `QOS\_L` (Low Latency) profile is available before starting a session. If unavailable (e.g., due to the user's plan or roaming status), the app can adjust settings or notify the user.
-        \item \textbf{Roaming Adaptation:} Since QoS profile names and availability may vary between roaming partners, applications can use this API to dynamically discover the valid profiles in the visited network.
+        \item {Pre-flight Validation:} A cloud gaming application can check if the `QOS\_L` (Low Latency) profile is available before starting a session. If unavailable (e.g., due to the user's plan or roaming status), the app can adjust settings or notify the user.
+        \item {Roaming Adaptation:} Since QoS profile names and availability may vary between roaming partners, applications can use this API to dynamically discover the valid profiles in the visited network.
     \end{itemize}
 
     \subsubsection{Quality on Demand (QoD)}
@@ -540,9 +471,9 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Functionality}
     The core capability of the API is the creation and management of QoS sessions. The primary endpoint (`POST /sessions`) allows the consumer to instantiate a session by specifying:
     \begin{itemize}
-        \item \textbf{Device:} The target user (identified by IP or Phone Number).
-        \item \textbf{QoS Profile:} The desired service level (e.g., `QOS\_L` for Low Latency), which determines the specific network parameters applied.
-        \item \textbf{Duration:} The requested lifetime of the session in seconds.
+        \item {Device:} The target user (identified by IP or Phone Number).
+        \item {QoS Profile:} The desired service level (e.g., `QOS\_L` for Low Latency), which determines the specific network parameters applied.
+        \item {Duration:} The requested lifetime of the session in seconds.
     \end{itemize}
     The API also supports retrieving session status (`GET /sessions/{sessionId}`) and deleting sessions (`DELETE /sessions/{sessionId}`) to release resources early.
     
@@ -564,7 +495,7 @@ In this context, network APIs function as an abstraction layer that presents com
       },
       "duration": 600
     }
-    
+     
     Response:
     {
       "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -577,8 +508,8 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Authorization and Addressing}
     To enforce QoS, the network must identify the specific flow or subscriber.
     \begin{itemize}
-        \item \textbf{Two-legged Access Token:} The consumer explicitly provides the device identifier. In QoD, identifying the device by \textbf{IPv4/IPv6 address} is often preferred over the Phone Number, as it allows the network to apply QoS policies to the specific data flow associated with that IP connection.
-        \item \textbf{Three-legged Access Token:} The subject is identified from the token. However, for precise traffic prioritization (e.g., applying QoS only to the gaming traffic and not background downloads), the application source IP might still be required in the session creation context.
+        \item {Two-legged Access Token:} The consumer explicitly provides the device identifier. In QoD, identifying the device by {IPv4/IPv6 address} is often preferred over the Phone Number, as it allows the network to apply QoS policies to the specific data flow associated with that IP connection.
+        \item {Three-legged Access Token:} The subject is identified from the token. However, for precise traffic prioritization (e.g., applying QoS only to the gaming traffic and not background downloads), the application source IP might still be required in the session creation context.
     \end{itemize}
     
     \paragraph{Multi-SIM Scenario}
@@ -587,18 +518,18 @@ In this context, network APIs function as an abstraction layer that presents com
     \paragraph{Error Handling}
     The API defines specific errors to handle resource contention and validation:
     \begin{itemize}
-        \item \textbf{409 CONFLICT:} A session already exists for this device, or the request conflicts with an existing policy.
-        \item \textbf{422 QOS\_PROFILE\_NOT\_FOUND:} The requested profile name (e.g., `QOS\_L`) is not valid or available for this user.
-        \item \textbf{422 UNAVAILABLE:} The network cannot fulfill the QoS request at the current location due to congestion or lack of resources.
-        \item \textbf{501 NOT\_IMPLEMENTED:} The requested duration or profile features are not supported by the operator.
+        \item {409 CONFLICT:} A session already exists for this device, or the request conflicts with an existing policy.
+        \item {422 QOS\_PROFILE\_NOT\_FOUND:} The requested profile name (e.g., `QOS\_L`) is not valid or available for this user.
+        \item {422 UNAVAILABLE:} The network cannot fulfill the QoS request at the current location due to congestion or lack of resources.
+        \item {501 NOT\_IMPLEMENTED:} The requested duration or profile features are not supported by the operator.
     \end{itemize}
     
     \paragraph{Use Cases}
     QoD enables a new class of network-aware applications:
     \begin{itemize}
-        \item \textbf{Real-Time Immersion (XR/Gaming):} Requesting low latency to minimize motion-to-photon delay in VR headsets or cloud gaming, preventing motion sickness.
-        \item \textbf{Remote Operations (Tele-driving):} Ensuring command signals for drones or industrial robots arrive within a strict time window to guarantee safety.
-        \item \textbf{Critical Communications:} Prioritizing video streams or control data for emergency response devices in congested areas.
+        \item {Real-Time Immersion (XR/Gaming):} Requesting low latency to minimize motion-to-photon delay in VR headsets or cloud gaming, preventing motion sickness.
+        \item {Remote Operations (Tele-driving):} Ensuring command signals for drones or industrial robots arrive within a strict time window to guarantee safety.
+        \item {Critical Communications:} Prioritizing video streams or control data for emergency response devices in congested areas.
     \end{itemize}
 
 \section{Real-World CAMARA-Based Use Cases}
@@ -610,26 +541,26 @@ The transition of CAMARA APIs from specification to deployment is already visibl
 The financial and retail sectors have been primary adopters of identity-focused APIs to combat fraud and reduce friction during user onboarding.
 
 \begin{itemize}
-    \item \textbf{Vinted (Number Verify):} The marketplace platform Vinted integrated the \textit{Number Verify API} to replace traditional SMS-based One-Time Passwords (OTPs). By verifying the user's phone number silently in the background, they significantly reduced transaction friction and registration drop-offs while maintaining high security standards \cite{telefonica_vinted}.
-    \item \textbf{Itaú Unibanco (Location \& SIM Swap):} One of the largest banks in Latin America, Itaú, utilized CAMARA APIs to secure financial transactions. By leveraging \textit{Location Verification} and \textit{SIM Swap} checks, the bank can detect if a transaction is originating from a trusted device and location, effectively blocking attempts at account takeover fraud \cite{telefonica_itau}.
-    \item \textbf{Currencies Direct (Fraud Protection):} This financial service provider implemented GSMA Open Gateway APIs to strengthen customer onboarding, ensuring that identity verification processes are both compliant and resistant to spoofing attacks \cite{gsma_currencies_direct}.
+    \item {Vinted (Number Verify):} The marketplace platform Vinted integrated the \textit{Number Verify API} to replace traditional SMS-based One-Time Passwords (OTPs). By verifying the user's phone number silently in the background, they significantly reduced transaction friction and registration drop-offs while maintaining high security standards \cite{telefonica_vinted}.
+    \item {Itaú Unibanco (Location \& SIM Swap):} One of the largest banks in Latin America, Itaú, utilized CAMARA APIs to secure financial transactions. By leveraging \textit{Location Verification} and \textit{SIM Swap} checks, the bank can detect if a transaction is originating from a trusted device and location, effectively blocking attempts at account takeover fraud \cite{telefonica_itau}.
+    \item {Currencies Direct (Fraud Protection):} This financial service provider implemented GSMA Open Gateway APIs to strengthen customer onboarding, ensuring that identity verification processes are both compliant and resistant to spoofing attacks \cite{gsma_currencies_direct}.
 \end{itemize}
 
 \subsection{Immersive Entertainment and Broadcasting}
 For applications requiring high bandwidth and low latency, the \textit{Quality on Demand (QoD)} API has proven essential in moving from "best-effort" to deterministic network performance.
 
 \begin{itemize}
-    \item \textbf{Blacknut (Cloud Gaming):} In collaboration with Telefónica, Blacknut integrated the \textit{QoD API} to guarantee stable throughput and low latency for cloud gaming. This ensures that users experience console-quality graphics and responsiveness on mobile networks, mitigating the impact of cell congestion \cite{telefonica_blacknut}.
-    \item \textbf{Cinfo (Event Broadcasting):} Specialized in AI-driven video production, Cinfo uses the \textit{QoD API} to reserve guaranteed uplink bandwidth. This allows cameras to stream high-definition sports events live from stadiums via 5G without relying on expensive satellite or fiber connections \cite{telefonica_cinfo}.
-    \item \textbf{Kanto (Interactive Media):} The interactive karaoke application Kanto utilizes network APIs to synchronize lyrics and video streams with minimal latency, ensuring a seamless sing-along experience for users on mobile connections \cite{telefonica_kanto}.
+    \item {Blacknut (Cloud Gaming):} In collaboration with Telefónica, Blacknut integrated the \textit{QoD API} to guarantee stable throughput and low latency for cloud gaming. This ensures that users experience console-quality graphics and responsiveness on mobile networks, mitigating the impact of cell congestion \cite{telefonica_blacknut}.
+    \item {Cinfo (Event Broadcasting):} Specialized in AI-driven video production, Cinfo uses the \textit{QoD API} to reserve guaranteed uplink bandwidth. This allows cameras to stream high-definition sports events live from stadiums via 5G without relying on expensive satellite or fiber connections \cite{telefonica_cinfo}.
+    \item {Kanto (Interactive Media):} The interactive karaoke application Kanto utilizes network APIs to synchronize lyrics and video streams with minimal latency, ensuring a seamless sing-along experience for users on mobile connections \cite{telefonica_kanto}.
 \end{itemize}
 
 \subsection{Healthcare and Remote Mobility}
 In critical sectors where network failure can have physical consequences, CAMARA APIs provide the necessary reliability layers.
 
 \begin{itemize}
-    \item \textbf{Apoqlar (HoloMedicine):} This medical technology company uses the \textit{QoD API} to support "VSI HoloMedicine". The API ensures the necessary bandwidth to stream complex 3D medical images and mixed reality overlays to surgeons' HoloLens glasses in real-time, facilitating remote collaboration and surgical planning \cite{telefonica_apoqlar}.
-    \item \textbf{Elmo (Remote Driving):} In a pilot with Nokia and Elisa, the rental company Elmo utilized network APIs to remotely control vehicles. The implementation relies on prioritized network slices to ensure that video feeds and control signals are transmitted without interruption, which is critical for the safety of remote driving operations \cite{nokia_elmo}.
+    \item {Apoqlar (HoloMedicine):} This medical technology company uses the \textit{QoD API} to support "VSI HoloMedicine". The API ensures the necessary bandwidth to stream complex 3D medical images and mixed reality overlays to surgeons' HoloLens glasses in real-time, facilitating remote collaboration and surgical planning \cite{telefonica_apoqlar}.
+    \item {Elmo (Remote Driving):} In a pilot with Nokia and Elisa, the rental company Elmo utilized network APIs to remotely control vehicles. The implementation relies on prioritized network slices to ensure that video feeds and control signals are transmitted without interruption, which is critical for the safety of remote driving operations \cite{nokia_elmo}.
 \end{itemize}
 
 These real-world integrations demonstrate that CAMARA APIs are not merely theoretical specifications but are actively solving connectivity and security challenges, driving value for both developers and network operators.
@@ -637,3 +568,8 @@ These real-world integrations demonstrate that CAMARA APIs are not merely theore
 \section{Summary of the Chapter}
 \label{sec:chapter_summary}
 
+This chapter explored the evolution of mobile networks towards programmable platforms, highlighting the transition from rigid legacy infrastructures to flexible, software-based architectures. We identified that despite these advances, the fragmentation of interfaces across different operators has historically hindered the scalability of third-party applications. The CAMARA initiative addresses this critical challenge by providing a unified service exposure layer, abstracting the complexity of the underlying network and ensuring consistent API behavior globally.
+
+The technical analysis confirmed that the specific APIs selected for this project—Device Identifier and SIM Swap for identity security, Location Retrieval and Verification for geolocation, and Quality on Demand for network performance—provide the necessary capabilities to bridge the gap between network resources and application needs. These standardized interfaces offer the precise tools required to develop value-generating applications without requiring deep telecommunications expertise.
+
+With the technological foundation established and the enabling tools identified, the context is set for the practical implementation. The following chapter will present the planning and methodology, defining the work plan to leverage these APIs in the development of the prototype.
